@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Heart 🤍</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #000000;
+            color: #ff3366;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .heart-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0.85);
+        }
+        .love-text {
+            position: absolute;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            animation: fadeIn 1.8s ease-in-out forwards;
+            text-shadow: 0 0 8px rgba(255, 51, 102, 0.4);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        /* Şarkıyı Başlatma Butonu */
+        .music-btn {
+            position: absolute;
+            z-index: 999;
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.6);
+            transition: 0.3s;
+        }
+        .music-btn:hover { transform: scale(1.05); background: #ff0033; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Karşı taraf tıklayınca hem müzik başlayacak hem kalp açılacak -->
+    <button class="music-btn" id="startBtn" onclick="startSurprise()">Sürprizi Başlat... ✨</button>
+
+    <div class="heart-container hidden" id="heart"></div>
+
+    <!-- 🎵 ÇALMASINI İSTEDİĞİN MASSIVE ATTACK - ANGEL ŞARKISI -->
+    <audio id="bgMusic" loop src="https://audio.com/abby-dobzyniak/audio/angel-radio-edit"></audio>
+
+    <script>
+        const words = [
+            "Seni seviyorum", "I love you", "Ich liebe dich", "Te amo", "Je t'aime", 
+            "Ti amo", "Aku cinta kamu", "Anh yêu em", "Ik hou van jou", "사랑해", 
+            "Я тебя люблю", "Jag älskar dig", "ฉันรักเธอ", "Kocham cię", "Σ' αγαπώ", 
+            "愛してる", "में तुमसे प्यार करता हूँ"
+        ];
+
+        function startSurprise() {
+            document.getElementById('startBtn').classList.add('hidden');
+            document.getElementById('heart').classList.remove('hidden');
+            
+            // Müziği arka planda çalmaya zorluyoruz
+            const music = document.getElementById('bgMusic');
+            music.play().catch(e => console.log("Müzik çalma hatası:", e));
+
+            drawHeart();
+        }
+
+        function drawHeart() {
+            const container = document.getElementById('heart');
+            const totalPoints = 450; 
+
+            for (let i = 0; i < totalPoints; i++) {
+                const t = (i / totalPoints) * 2 * Math.PI;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+
+                const posX = 300 + x * 15;
+                const posY = 260 - y * 15;
+
+                const randomWord = words[Math.floor(Math.random() * words.length)];
+                const colors = ['#ff3366', '#ff0033', '#ff6699', '#ff3300', '#ff0066', '#ff4d6d'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                const span = document.createElement('span');
+                span.classList.add('love-text');
+                span.innerText = randomWord;
+                span.style.left = posX + 'px';
+                span.style.top = posY + 'px';
+                span.style.color = randomColor;
+                span.style.fontSize = (11 + Math.random() * 4) + 'px';
+                span.style.animationDelay = (Math.random() * 2) + 's';
+
+                container.appendChild(span);
+            }
+        }
+    </script>
+</body>
+</html>
